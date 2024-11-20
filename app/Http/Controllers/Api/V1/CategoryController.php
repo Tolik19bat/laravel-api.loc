@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Resources\V1\CategoryResource;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
@@ -14,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return Category::all();
+        return CategoryResource::collection(Category::all());
     }
 
     /**
@@ -30,7 +31,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return $category;
+        return new CategoryResource($category);
     }
 
     /**
@@ -47,8 +48,8 @@ class CategoryController extends Controller
         $category->save();
 
         // Возвращаем ответ (например, JSON ответ)  
-        return response()->json(['message' => 'Категория успешно обновлена.', 'category' => $category], 200);
-
+        response()->json(['message' => 'Категория успешно обновлена.', 'category' => $category], 200);
+        return  new CategoryResource($category);
     }
 
     /**
