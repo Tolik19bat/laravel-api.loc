@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::all();
+        return PostResource::collection(Post::with('category')->paginate(5));
     }
 
     /**
@@ -23,7 +23,7 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        return Post::create($request->all());
+        return new Postresource(Post::create($request->all()));
     }
 
     /**
@@ -32,7 +32,7 @@ class PostController extends Controller
     public function show(Post $post)
     {
 
-        return $post;
+        return new PostResource($post);
     }
 
     /**
@@ -45,7 +45,9 @@ class PostController extends Controller
         $post->update($request->all());
 
         // Возвращаем ответ (например, JSON ответ)  
-        return response()->json(['message' => 'Категория успешно обновлена.', 'category' => $post], 200);
+        response()->json(['message' => 'Категория успешно обновлена.', 'category' => $post], 200);
+
+        return new PostResource($post);
 
     }
 
