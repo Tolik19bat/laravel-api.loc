@@ -9,9 +9,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/v1/categories', [App\Http\Controllers\Api\V1\CategoryController::class, 'index']);
-
-Route::prefix('v1')->group(function () {
+Route::middleware(['throttle:api'])->prefix('v1')->group(function () {
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('posts', PostController::class);
 });
